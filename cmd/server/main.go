@@ -1,23 +1,33 @@
 package main
 
 import (
-	"context"
 	"log"
 	"net/http"
+	"os"
+	"time"
 
 	"github.com/CsToMy/weather-api/internal/api"
-	"github.com/CsToMy/weather-api/internal/weather"
+	"github.com/CsToMy/weather-api/internal/openweather"
 )
 
-type stubProvider struct{}
-
-func (stubProvider) Current(ctx context.Context, city string) (weather.Weather, error) {
-	return weather.Weather{City: city, TempC: 20, Description: "stub data"}, nil
-}
+const openWeatherBaseURL = "https://api.openweathermap.org"
 
 func main() {
-	router := api.NewRouter(stubProvider{})
+	apiKey := os.Getenv("OPENWEATHER_API_KEY")
+	if apiKey == "" {
+		log.Fatal("OPENWEATHER_API_KEY environment variable is required")
+	}
+
+	httpClient := &http.Client{Timeout: 5 * time.Second}
+
+	provider := openweather.NewClient(openWeatherBaseURL, apiKey, httpClient)
+
+	srv := &http.Server{
+		Addr:              ":8080",
+		Handler:           api.NewRouter(provider),
+		ReadHeaderTimeout: 5 * time.Second,
+	}
 
 	log.Println("listening on :8080")
-	log.Fatal(http.ListenAndServe(":8080", router))
+	log.Fatal(srv.ListenAndServe())
 }
