@@ -39,7 +39,7 @@ func TestWeatherHandlerStatus(t *testing.T) {
 			req := httptest.NewRequest(http.MethodGet, tc.url, nil)
 			rec := httptest.NewRecorder()
 
-			router.ServeHTTP(rec, rec)
+			router.ServeHTTP(rec, req)
 
 			if rec.Code != tc.wantStatus {
 				t.Fatalf("status = %d, want %d", rec.Code, tc.wantStatus)
