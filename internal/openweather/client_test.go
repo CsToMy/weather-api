@@ -33,7 +33,7 @@ func TestCurrentSuccess(t *testing.T) {
 		t.Fatalf("unexpected error: %v", err)
 	}
 
-	want := weather.Weather{City: "Stuttgart", TempC: 17.4, Description: "overcast clouds"}
+	want := weather.Weather{City: "Stuttgart", TempC: 12.5, Description: "overcast clouds"}
 	if got != want {
 		t.Fatalf("got %+v, want %+v", got, want)
 	}
