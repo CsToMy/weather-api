@@ -1,18 +1,23 @@
 package main
 
 import (
-	"fmt"
+	"context"
 	"log"
 	"net/http"
+
+	"github.com/CsToMy/weather-api/internal/api"
+	"github.com/CsToMy/weather-api/internal/weather"
 )
 
-func main() {
-	mux := http.NewServeMux()
+type stubProvider struct{}
 
-	mux.HandleFunc("GET /health", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprint(w, "ok")
-	})
+func (stubProvider) Current(ctx context.Context, city string) (weather.Weather, error) {
+	return weather.Weather{City: city, TempC: 20, Description: "stub data"}, nil
+}
+
+func main() {
+	router := api.NewRouter(stubProvider{})
 
 	log.Println("listening on :8080")
-	log.Fatal(http.ListenAndServe(":8080", mux))
+	log.Fatal(http.ListenAndServe(":8080", router))
 }
