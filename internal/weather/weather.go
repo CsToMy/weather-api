@@ -5,7 +5,7 @@ import (
 	"errors"
 )
 
-var ErrCityNotFound = errors.New("City not found.")
+var ErrCityNotFound = errors.New("city not found")
 
 type Weather struct {
 	City        string  `json:"city"`

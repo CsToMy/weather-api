@@ -36,7 +36,7 @@ func TestWeatherHandlerStatus(t *testing.T) {
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
 			router := NewRouter(tc.provider)
-			req := httptest.NewRequest(http.MethodGet, tc.url, nil)
+			req := httptest.NewRequestWithContext(context.Background(), http.MethodGet, tc.url, nil)
 			rec := httptest.NewRecorder()
 
 			router.ServeHTTP(rec, req)
@@ -51,7 +51,7 @@ func TestWeatherHandlerStatus(t *testing.T) {
 func TestWeatherHandlerBody(t *testing.T) {
 	want := weather.Weather{City: "Stuttgart", TempC: 17.4, Description: "cloudy"}
 	router := NewRouter(fakeProvider{result: want})
-	req := httptest.NewRequest(http.MethodGet, "/weather?city=Berlin", nil)
+	req := httptest.NewRequestWithContext(context.Background(), http.MethodGet, "/weather?city=Berlin", nil)
 	rec := httptest.NewRecorder()
 
 	router.ServeHTTP(rec, req)

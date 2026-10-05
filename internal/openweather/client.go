@@ -54,7 +54,7 @@ func (c *Client) Current(ctx context.Context, city string) (weather.Weather, err
 		}
 		return weather.Weather{}, fmt.Errorf("call openweather: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	switch {
 	case resp.StatusCode == http.StatusNotFound:
