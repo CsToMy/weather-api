@@ -45,6 +45,15 @@ curl "localhost:8080/weather?city=Berlin"
 
 On Windows PowerShell use `curl.exe` instead of `curl`.
 
+## Run with Docker
+
+```bash
+cp .env.example .env      # then put your API key into .env
+docker compose up --build
+```
+
+The API is then available at `http://localhost:8080`.
+
 ## API
 
 ### `GET /weather?city=<name>`
@@ -131,8 +140,8 @@ Both use table-driven tests where it makes sense.
 
 ## Roadmap
 
-- [ ] GitHub Actions: lint, test (with the race detector) and build on every push
-- [ ] Dockerfile and `docker-compose`
+- [x] GitHub Actions: lint, test (with the race detector) and build on every push
+- [x] Dockerfile and `docker-compose`
 - [ ] PostgreSQL: saved cities (CRUD) and request history
 - [ ] Response cache (in-memory first, Redis later)
 - [ ] Graceful shutdown
