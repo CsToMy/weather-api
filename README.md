@@ -137,6 +137,7 @@ Both use table-driven tests where it makes sense.
 - **`context` everywhere.** Requests carry the caller's `context`, so cancellations and timeouts propagate to the outgoing call.
 - **Errors are mapped deliberately.** A sentinel error (`weather.ErrCityNotFound`) separates "no such city" (`404`) from every other failure (`502`). Wrapped errors keep the cause available through `errors.Is`.
 - **Secrets stay out of errors.** The OpenWeather API accepts the key only as a URL parameter, and Go's HTTP client errors include the full URL. The client therefore unwraps the error before returning it.
+- **Graceful shutdown.** On `SIGINT`/`SIGTERM` the server stops accepting connections and waits for in-flight requests. The shutdown timeout (10 s) is deliberately longer than the outgoing HTTP client timeout (5 s), so a request that is already running can finish before the server gives up.
 
 ## Roadmap
 
@@ -144,5 +145,5 @@ Both use table-driven tests where it makes sense.
 - [x] Dockerfile and `docker-compose`
 - [ ] PostgreSQL: saved cities (CRUD) and request history
 - [ ] Response cache (in-memory first, Redis later)
-- [ ] Graceful shutdown
+- [x] Graceful shutdown
 - [ ] Small CLI in `cmd/` reusing the same packages
