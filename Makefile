@@ -1,4 +1,4 @@
-.PHONY: run build test cover vet fmt lint check docker-build up down
+.PHONY: run build test cover vet fmt lint check docker-build up down db-up db-down db-psql
 
 run:
 	go run ./cmd/server
@@ -31,3 +31,12 @@ up:
 
 down:
 	docker compose down
+
+db-up:
+	docker compose up -d db
+
+db-down:
+	docker compose down
+
+db-psql:
+	docker compose exec db psql -U weather -d weather
